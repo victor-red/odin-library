@@ -52,7 +52,10 @@ function displayLibrary(library){
             removeSelf(book);
         });
 
-        removeSelfBtn.addEventListener("click", removeSelf(book));
+        readToggleBtn.addEventListener("click", () => {
+            book.read = !book.read;
+            displayLibrary(myLibrary);
+        });
 
 
         bookCard.appendChild(readToggleBtn);
