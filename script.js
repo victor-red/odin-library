@@ -7,75 +7,85 @@ const bookTitleInput = document.querySelector("#book_title");
 const bookAuthorInput = document.querySelector("#book_author");
 const bookPagesInput = document.querySelector("#book_pages");
 const bookReadInput = document.querySelector("#book_read");
-const myLibrary = [];
 
 
-function Book(title, author, pages, read){
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
 
-
-}
-
-
-function displayLibrary(library){
-    content.innerHTML = "";
-
-
-    for (let i = 0; i < library.length; i++) {
-        let book = library[i];
-        const bookCard = document.createElement("div");
-        bookCard.className = "book-card";
-    
-        const bookTitle = document.createElement("h3");
-        bookTitle.textContent = `Title : ${book.title}`;
-        bookCard.appendChild(bookTitle);
-    
-        const bookAuthor = document.createElement("p");
-        bookAuthor.textContent = `Author : ${book.author}`;
-        bookCard.appendChild(bookAuthor);
-
-        const bookPages = document.createElement("p");
-        bookPages.textContent = `Pages : ${book.pages} pages`;
-        bookCard.appendChild(bookPages);
-
-
-        const readToggleBtn = document.createElement("button");
-        readToggleBtn.textContent = book.read ? "Read" : "Not Read"; 
-
-        const removeSelfBtn = document.createElement("button");
-        removeSelfBtn.textContent = "Remove";
-
-        removeSelfBtn.addEventListener("click", () => {
-            removeSelf(book);
-        });
-
-        readToggleBtn.addEventListener("click", () => {
-            book.read = !book.read;
-            displayLibrary(myLibrary);
-        });
-
-
-        bookCard.appendChild(readToggleBtn);
-        bookCard.appendChild(removeSelfBtn)/
-        content.appendChild(bookCard);
+class Library{
+    constructor(){
+        this.library = [];
     }
-}
 
-function removeSelf(book){
-    for (let i = 0; i < myLibrary.length; i++){
-        if (myLibrary[i].title == book.title){
-            myLibrary.splice(i, 1);
+    displayLibrary(){
+        content.innerHTML = "";
+    
+    
+        for (let i = 0; i < this.library.length; i++) {
+            let book = this.library[i];
+            const bookCard = document.createElement("div");
+            bookCard.className = "book-card";
+        
+            const bookTitle = document.createElement("h3");
+            bookTitle.textContent = `Title : ${book.title}`;
+            bookCard.appendChild(bookTitle);
+        
+            const bookAuthor = document.createElement("p");
+            bookAuthor.textContent = `Author : ${book.author}`;
+            bookCard.appendChild(bookAuthor);
+    
+            const bookPages = document.createElement("p");
+            bookPages.textContent = `Pages : ${book.pages} pages`;
+            bookCard.appendChild(bookPages);
+    
+    
+            const readToggleBtn = document.createElement("button");
+            readToggleBtn.textContent = book.read ? "Read" : "Not Read"; 
+    
+            const removeSelfBtn = document.createElement("button");
+            removeSelfBtn.textContent = "Remove";
+    
+            removeSelfBtn.addEventListener("click", () => {
+                this.removeBook(book);
+            });
+    
+            readToggleBtn.addEventListener("click", () => {
+                book.read = !book.read;
+                myLibrary.displayLibrary();
+            });
+    
+    
+            bookCard.appendChild(readToggleBtn);
+            bookCard.appendChild(removeSelfBtn);
+            content.appendChild(bookCard);
         }
     }
-    displayLibrary(myLibrary);
+
+    removeBook(book){
+        for (let i = 0; i < this.library.length; i++){
+            if (this.library[i].title == book.title){
+                this.library.splice(i, 1);
+            }
+        }
+        this.displayLibrary();
+    }
+
+    addBookToLibrary(book){
+        this.library.push(book);
+    }
 }
 
-function addBookToLibrary(book){
-    myLibrary.push(book);
+class Book{
+    constructor(title, author, pages, read){
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+    }
 }
+
+
+const myLibrary = new Library();
+
+
 
 function formAddToLibrary(event){
 
@@ -101,8 +111,8 @@ function formAddToLibrary(event){
     overlay.classList.remove("active");
     bookFormDiv.classList.remove("active");
 
-    addBookToLibrary(newBook);
-    displayLibrary(myLibrary);
+    myLibrary.addBookToLibrary(newBook);
+    myLibrary.displayLibrary();
 }
 
 overlay.addEventListener("click", () =>{
@@ -120,4 +130,4 @@ submitBtn.addEventListener("click" , formAddToLibrary)
 
 
 
-displayLibrary(myLibrary);
+myLibrary.displayLibrary();
